@@ -22,19 +22,17 @@ func NewTTLCache(inner httpcache.Cache, ttl time.Duration) *ttlCache {
 	}
 }
 
-func NewCachingClient() *http.Client {
-	// Use diskcache for persistent caching (use memorycache for in-memory)
-	cacheDir := "./.httpcache"
-	cache := diskcache.New(cacheDir)
+func NewCachingClient(cacheDir string, cacheDurationMinutes int) *http.Client {
+	baseCache := diskcache.New(cacheDir)
+	ttl := 5 * time.Minute // default
+	if cacheDurationMinutes > 0 {
+		ttl = time.Duration(cacheDurationMinutes) * time.Minute
+	}
+	cache := NewTTLCache(baseCache, ttl)
 
 	transport := httpcache.NewTransport(cache)
-	// Optionally, customize the underlying Transport:
-	transport.Transport = &http.Transport{
-		// ... any custom transport settings ...
-	}
-
-	client := transport.Client()
-	return client
+	transport.Transport = &http.Transport{}
+	return transport.Client()
 }
 
 func (c *ttlCache) Set(key string, resp []byte) {

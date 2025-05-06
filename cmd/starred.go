@@ -20,10 +20,12 @@ import (
 )
 
 var (
-	saveJson     bool
-	outputFile   string
-	saveDB       bool
-	requestSleep int
+	saveJson      bool
+	outputFile    string
+	saveDB        bool
+	requestSleep  int
+	cacheDir      string
+	cacheDuration int
 )
 
 var starredCmd = &cobra.Command{
@@ -100,6 +102,14 @@ func init() {
 	viper.BindPFlag("output_file", getCmd.Flags().Lookup("output"))
 	viper.BindPFlag("save_db", getCmd.Flags().Lookup("save-db"))
 	viper.BindPFlag("request_sleep", getCmd.Flags().Lookup("request-sleep"))
+
+	// Cache flags
+	getCmd.Flags().StringVar(&cacheDir, "cache-dir", ".httpcache", "Directory for HTTP cache storage")
+	getCmd.Flags().IntVar(&cacheDuration, "cache-duration", 5, "HTTP cache duration in minutes (0 to disable)")
+	viper.BindPFlag("cache_dir", getCmd.Flags().Lookup("cache-dir"))
+	viper.BindPFlag("cache_duration", getCmd.Flags().Lookup("cache-duration"))
+	viper.SetDefault("cache_dir", ".httpcache")
+	viper.SetDefault("cache_duration", 5)
 }
 
 func loadGitHubToken() string {
@@ -109,8 +119,11 @@ func loadGitHubToken() string {
 }
 
 func fetchAllStarredRepos(token string, requestSleep int, acceptHeaderVal string, url string) ([]Github.Repository, error) {
-	// client := &http.Client{Timeout: 15 * time.Second}
-	client := cache.NewCachingClient()
+	client := cache.NewCachingClient(
+		viper.GetString("cache_dir"),
+		viper.GetInt("cache_duration"),
+	)
+
 	var allRepos []Github.Repository
 	page := 1
 
