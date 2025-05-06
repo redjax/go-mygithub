@@ -1,0 +1,5 @@
+*.json
+pat
+*.db
+*.sqlite
+*.sqlite3
