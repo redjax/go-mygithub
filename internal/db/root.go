@@ -181,6 +181,7 @@ func toNullBool(b *bool) sql.NullBool {
 	return sql.NullBool{Bool: *b, Valid: true}
 }
 
+// Save Repository models to database
 func SaveRepositories(db *gorm.DB, repos []Github.Repository) error {
 	for i, repo := range repos {
 		// Convert schemas to model
@@ -222,12 +223,15 @@ func SaveRepositories(db *gorm.DB, repos []Github.Repository) error {
 	return nil
 }
 
+// Initialize the database
 func InitDB() (*gorm.DB, error) {
+	// Create database connection
 	db, err := gorm.Open(sqlite.Open("mygithub.db"), &gorm.Config{})
 	if err != nil {
 		return nil, err
 	}
 
+	// Do migrations
 	err = db.AutoMigrate(
 		&Github.RepositoryModel{},
 		&Github.RepositoryOwnerModel{},

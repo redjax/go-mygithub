@@ -3,6 +3,7 @@ package Github
 
 import "time"
 
+// Repository represents the main schema
 type Repository struct {
 	ID                       int                    `json:"id"`
 	NodeID                   string                 `json:"node_id"`
@@ -86,6 +87,7 @@ type Repository struct {
 	Permissions              *RepositoryPermissions `json:"permissions"`
 }
 
+// Schema for the owner of a repository
 type RepositoryOwner struct {
 	Login             string `json:"login"`
 	ID                int    `json:"id"`
@@ -108,6 +110,7 @@ type RepositoryOwner struct {
 	SiteAdmin         bool   `json:"site_admin"`
 }
 
+// Schema for the license of a repository
 type RepositoryLicense struct {
 	Key    *string `json:"key"`
 	Name   *string `json:"name"`
@@ -116,6 +119,7 @@ type RepositoryLicense struct {
 	NodeID *string `json:"node_id"`
 }
 
+// Schema for the permissions of a repository
 type RepositoryPermissions struct {
 	Admin    *bool `json:"admin"`
 	Maintain *bool `json:"maintain"`

@@ -95,6 +95,7 @@ type RepositoryModel struct {
 	Permissions              *RepositoryPermissionsModel `gorm:"foreignKey:PermissionsID;references:ID" json:"permissions"`
 }
 
+// Model for details about the owner of a repository
 type RepositoryOwnerModel struct {
 	ID                int    `gorm:"primaryKey" json:"id"`
 	Login             string `json:"login"`
@@ -117,6 +118,7 @@ type RepositoryOwnerModel struct {
 	SiteAdmin         bool   `json:"site_admin"`
 }
 
+// Model for details about a repository's license
 type RepositoryLicenseModel struct {
 	ID     int            `gorm:"primaryKey" json:"-"`
 	Key    sql.NullString `json:"key"`
@@ -126,6 +128,7 @@ type RepositoryLicenseModel struct {
 	NodeID sql.NullString `json:"node_id"`
 }
 
+// Model for details about a repository's permissions
 type RepositoryPermissionsModel struct {
 	ID       int          `gorm:"primaryKey" json:"-"`
 	Admin    sql.NullBool `json:"admin"`

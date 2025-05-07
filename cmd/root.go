@@ -5,15 +5,18 @@ import (
 	"github.com/spf13/viper"
 )
 
+// Set global CLI args
 var (
 	accessToken string
 )
 
+// Initialize root CLI
 var rootCmd = &cobra.Command{
 	Use:   "mygithub",
 	Short: "CLI for Github",
 }
 
+// Function to start CLI
 func Execute() error {
 	return rootCmd.Execute()
 }
