@@ -1,4 +1,6 @@
 .httpcache/*
+dist/*
+build/*
 
 *.json
 pat
